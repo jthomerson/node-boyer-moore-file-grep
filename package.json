@@ -1,0 +1,29 @@
+{
+  "name": "node-boyer-moore-file-grep",
+  "version": "0.1.0",
+  "description": "Boyer-Moore string searching algorithm implementation in node",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/mocha src/tests/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jthomerson/node-boyer-moore-file-grep.git"
+  },
+  "keywords": [
+    "Boyer-Moore",
+    "grep",
+    "ag",
+    "silver_searcher"
+  ],
+  "author": "Jeremy Thomerson",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jthomerson/node-boyer-moore-file-grep/issues"
+  },
+  "homepage": "https://github.com/jthomerson/node-boyer-moore-file-grep#readme",
+  "dependencies": {
+    "class.extend": "0.9.1",
+    "underscore": "1.8.3"
+  }
+}
