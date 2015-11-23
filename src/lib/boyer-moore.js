@@ -1,8 +1,7 @@
 "use strict";
 
 var _ = require('underscore'),
-    Class = require('class.extend'),
-    ALPHABET_SIZE = 256;
+    Class = require('class.extend');
 
 module.exports = Class.extend({
 
@@ -29,27 +28,69 @@ module.exports = Class.extend({
       offsetTable = this._makeOffsetTable(needle);
 
       for (var i = (needle.length - 1); i < haystack.length;) {
+         var offsetsForChar, offset;
+
          for (var j = (needle.length - 1); needle[j] == haystack[i]; --i, --j) {
             if (j === 0) {
                return i;
             }
          }
 
-         i += Math.max(offsetTable[needle.length - 1 - j], charTable[haystack.charCodeAt(i)]);
+         offsetsForChar = charTable[haystack[i]];
+         offset = (offsetsForChar === undefined ? needle.length : offsetsForChar[j]);
+
+         i += Math.max(offsetTable[needle.length - 1 - j], offset);
       }
 
       return -1;
    },
 
+   /**
+    * Make a table so that in haystach H if a mismatch is found at index N of your
+    * needle, you can lookup `table[haystackMismatchChar][N]` to see how far
+    * your needle must shift to the right in order to align the current haystack
+    * character with its next occurrence to the left in your needle.
+    *
+    * If the mismatched haystack character does not appear again to the left in
+    * your needle then how far must you go to shift the entire needle one
+    * character past your current mismatch position in the haystack.
+    *
+    * If your haystack mismatched character is not present in your needle at
+    * all then the entire needle should shift to the right past the current
+    * haystack position since it is impossible for any part of the needle to
+    * ever match.
+    *
+    * ```
+    *  Example table for needle "NNAAMAN" (indexes of each letter shown on next line):
+    *                            0123456
+    *  {
+    *     "N": { 2: 1, 3: 2, 4: 3, 5: 4 },
+    *     "A": { 0: 1, 1: 2, 4: 1, 6: 1 },
+    *     "M": { 0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 1, 6: 2 },
+    *  }
+    * ```
+    */
    _makeCharTable: function(needle) {
-      var table = new Uint32Array(ALPHABET_SIZE);
+      var uniqChars = _.uniq(needle.split('')),
+          prevPositions = {},
+          table = {};
 
-      for (var i = 0; i < table.length; ++i) {
-         table[i] = needle.length;
-      }
-      for (var i = 0; i < (needle.length - 1); ++i) {
-         var c = needle.charCodeAt(i);
-         table[c] = (needle.length - 1 - i);
+      for (var i = 0; i < needle.length; i++) {
+         var needleChar = needle[i];
+
+         _.each(uniqChars, function(c) {
+            var prev = prevPositions[c];
+
+            if (c !== needleChar) {
+               if (table[c] === undefined) {
+                  table[c] = {};
+               }
+
+               table[c][i] = (prev === undefined ? (i + 1) : (i - prev));
+            }
+         });
+
+         prevPositions[needleChar] = i;
       }
 
       return table;
