@@ -1,9 +1,9 @@
 "use strict";
 
 var _ = require('underscore'),
-    Class = require('class.extend');
+    Algorithm;
 
-module.exports = Class.extend({
+Algorithm = {
 
    /**
     * Returns the index within `haystack` of the first occurrence of the specified
@@ -133,4 +133,10 @@ module.exports = Class.extend({
       return len;
    },
 
-});
+};
+
+module.exports = {
+
+   indexOf: Algorithm.indexOf.bind(Algorithm),
+
+};

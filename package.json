@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/jthomerson/node-boyer-moore-file-grep#readme",
   "dependencies": {
-    "class.extend": "0.9.1",
     "underscore": "1.8.3"
   },
   "devDependencies": {
