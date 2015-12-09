@@ -4,7 +4,7 @@ var expect = require('expect.js'),
     BoyerMoore = require('../lib/boyer-moore'),
     SAMPLE_TEXT = 'وهذا هو نص تجريبي باللغة العربية مع English ممزوجة.';
 
-describe('Searches with non-ASCII text', function() {
+describe('Searches with Arabic (RTL) text', function() {
 
    it('finds things at the first index', function() {
       expect(BoyerMoore.indexOf(SAMPLE_TEXT, 'وهذا')).to.be(0);
